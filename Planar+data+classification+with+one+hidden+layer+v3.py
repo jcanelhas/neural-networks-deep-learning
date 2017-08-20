@@ -41,7 +41,7 @@ np.random.seed(1) # set a seed so that the results are consistent
 # 
 # First, let's get the dataset you will work on. The following code will load a "flower" 2-class dataset into variables `X` and `Y`.
 
-# In[8]:
+# In[178]:
 
 X, Y = load_planar_dataset()
 
@@ -114,7 +114,7 @@ clf.fit(X.T, Y.T);
 
 # You can now plot the decision boundary of these models. Run the code below.
 
-# In[12]:
+# In[179]:
 
 # Plot the decision boundary for logistic regression
 plot_decision_boundary(lambda x: clf.predict(x), X, Y)
@@ -178,7 +178,7 @@ print ('Accuracy of logistic regression: %d ' % float((np.dot(Y,LR_predictions) 
 # 
 # **Hint**: Use shapes of X and Y to find n_x and n_y. Also, hard code the hidden layer size to be 4.
 
-# In[13]:
+# In[180]:
 
 # GRADED FUNCTION: layer_sizes
 
@@ -201,7 +201,7 @@ def layer_sizes(X, Y):
     return (n_x, n_h, n_y)
 
 
-# In[14]:
+# In[181]:
 
 X_assess, Y_assess = layer_sizes_test_case()
 (n_x, n_h, n_y) = layer_sizes(X_assess, Y_assess)
@@ -241,7 +241,7 @@ print("The size of the output layer is: n_y = " + str(n_y))
 # - You will initialize the bias vectors as zeros. 
 #     - Use: `np.zeros((a,b))` to initialize a matrix of shape (a,b) with zeros.
 
-# In[55]:
+# In[182]:
 
 # GRADED FUNCTION: initialize_parameters
 
@@ -282,7 +282,7 @@ def initialize_parameters(n_x, n_h, n_y):
     return parameters
 
 
-# In[56]:
+# In[183]:
 
 n_x, n_h, n_y = initialize_parameters_test_case()
 
@@ -340,7 +340,7 @@ print("b2 = " + str(parameters["b2"]))
 #     2. Implement Forward Propagation. Compute $Z^{[1]}, A^{[1]}, Z^{[2]}$ and $A^{[2]}$ (the vector of all your predictions on all the examples in the training set).
 # - Values needed in the backpropagation are stored in "`cache`". The `cache` will be given as an input to the backpropagation function.
 
-# In[57]:
+# In[184]:
 
 # GRADED FUNCTION: forward_propagation
 
@@ -380,7 +380,7 @@ def forward_propagation(X, parameters):
     return A2, cache
 
 
-# In[58]:
+# In[185]:
 
 X_assess, parameters = forward_propagation_test_case()
 
@@ -414,7 +414,7 @@ print(np.mean(cache['Z1']) ,np.mean(cache['A1']),np.mean(cache['Z2']),np.mean(ca
 # (you can use either `np.multiply()` and then `np.sum()` or directly `np.dot()`).
 # 
 
-# In[76]:
+# In[186]:
 
 # GRADED FUNCTION: compute_cost
 
@@ -446,7 +446,7 @@ def compute_cost(A2, Y, parameters):
     return cost
 
 
-# In[77]:
+# In[187]:
 
 A2, Y_assess, parameters = compute_cost_test_case()
 
@@ -497,7 +497,7 @@ print("cost = " + str(compute_cost(A2, Y_assess, parameters)))
 #     - To compute dZ1 you'll need to compute $g^{[1]'}(Z^{[1]})$. Since $g^{[1]}(.)$ is the tanh activation function, if $a = g^{[1]}(z)$ then $g^{[1]'}(z) = 1-a^2$. So you can compute 
 #     $g^{[1]'}(Z^{[1]})$ using `(1 - np.power(A1, 2))`.
 
-# In[111]:
+# In[188]:
 
 # GRADED FUNCTION: backward_propagation
 
@@ -551,7 +551,7 @@ def backward_propagation(parameters, cache, X, Y):
     return grads
 
 
-# In[112]:
+# In[189]:
 
 parameters, cache, X_assess, Y_assess = backward_propagation_test_case()
 
@@ -606,7 +606,7 @@ print ("db2 = "+ str(grads["db2"]))
 # 
 # 
 
-# In[113]:
+# In[190]:
 
 # GRADED FUNCTION: update_parameters
 
@@ -653,7 +653,7 @@ def update_parameters(parameters, grads, learning_rate = 1.2):
     return parameters
 
 
-# In[114]:
+# In[191]:
 
 parameters, grads = update_parameters_test_case()
 parameters = update_parameters(parameters, grads)
@@ -703,7 +703,7 @@ print("b2 = " + str(parameters["b2"]))
 # 
 # **Instructions**: The neural network model has to use the previous functions in the right order.
 
-# In[139]:
+# In[192]:
 
 # GRADED FUNCTION: nn_model
 
@@ -759,7 +759,7 @@ def nn_model(X, Y, n_h, num_iterations = 10000, print_cost=False):
     return parameters
 
 
-# In[140]:
+# In[193]:
 
 X_assess, Y_assess = nn_model_test_case()
 
@@ -814,7 +814,7 @@ print("b2 = " + str(parameters["b2"]))
 #     
 # As an example, if you would like to set the entries of a matrix X to 0 and 1 based on a threshold you would do: ```X_new = (X > threshold)```
 
-# In[158]:
+# In[199]:
 
 # GRADED FUNCTION: predict
 
@@ -833,15 +833,15 @@ def predict(parameters, X):
     # Computes probabilities using forward propagation, and classifies to 0/1 using 0.5 as the threshold.
     ### START CODE HERE ### (≈ 2 lines of code)
     A2, cache = forward_propagation(X, parameters)
-    print (X)
-    predictions = X < 0.5
-    print (predictions)
+    #print (X)
+    predictions = (A2 > 0.5)*1 #com o maior nao funciona
+    #print (predictions)
     ### END CODE HERE ###
     
     return predictions
 
 
-# In[159]:
+# In[201]:
 
 parameters, X_assess = predict_test_case()
 
@@ -862,7 +862,7 @@ print("predictions mean = " + str(np.mean(predictions)))
 
 # It is time to run the model and see how it performs on a planar dataset. Run the following code to test your model with a single hidden layer of $n_h$ hidden units.
 
-# In[160]:
+# In[202]:
 
 # Build a model with a n_h-dimensional hidden layer
 parameters = nn_model(X, Y, n_h = 4, num_iterations = 10000, print_cost=True)
@@ -883,7 +883,7 @@ plt.title("Decision Boundary for hidden layer size " + str(4))
 # </table>
 # 
 
-# In[137]:
+# In[203]:
 
 # Print accuracy
 predictions = predict(parameters, X)
@@ -907,7 +907,7 @@ print ('Accuracy: %d' % float((np.dot(Y,predictions.T) + np.dot(1-Y,1-prediction
 # 
 # Run the following code. It may take 1-2 minutes. You will observe different behaviors of the model for various hidden layer sizes.
 
-# In[161]:
+# In[204]:
 
 # This may take about 2 minutes to run
 
@@ -961,7 +961,7 @@ datasets = {"noisy_circles": noisy_circles,
             "gaussian_quantiles": gaussian_quantiles}
 
 ### START CODE HERE ### (choose your dataset)
-dataset = "noisy_moons"
+dataset ="gaussian_quantiles"
 ### END CODE HERE ###
 
 X, Y = datasets[dataset]
